@@ -55,7 +55,6 @@ struct TextureAtlas_atlas {
 };
 
 struct TextureAtlas_page {
-
 	/* Filename of the image backing this page. */
 	char* name;
 
