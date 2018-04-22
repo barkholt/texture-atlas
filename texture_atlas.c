@@ -439,6 +439,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 		while (keepScanningRegions) {
 			// Create region to fill, and initialize to known default/invalid state.
 			struct TextureAtlas_region* region = malloc(sizeof(struct TextureAtlas_region));
+			region->page = page;
 			region->name = NULL;
 			region->width = -1;
 			region->height = -1;

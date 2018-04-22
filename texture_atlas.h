@@ -82,6 +82,9 @@ struct TextureAtlas_page {
 };
 
 struct TextureAtlas_region {
+	/* The page this region belongs to.*/
+	struct TextureAtlas_page* page;
+
 	/* The name of the original image file, up to the first underscore.
 	 * Underscores denote special instructions to the texture packer. */
 	char* name;
