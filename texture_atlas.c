@@ -298,6 +298,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 	// Create and initialize the atlas object we will be injecting data into
 	struct TextureAtlas_atlas* atlas = malloc(sizeof(struct TextureAtlas_atlas));
 	atlas->firstPage = NULL;
+	atlas->numberOfPages = 0;
 
 	// Setup variables for reading lines
 	char* lineBuffer = malloc(sizeof(char) * BUFFER_SIZE);
@@ -314,10 +315,11 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 	struct TextureAtlas_page* previousPage = NULL;
 
 	bool keepScanningPages = true;
-
+	int nextPageIndex = 0;
 	while (keepScanningPages) {
 		// Create page, and initialized to a known invalid state
 		struct TextureAtlas_page* page = malloc(sizeof(struct TextureAtlas_page));
+		page->index = nextPageIndex++;
 		page->name = NULL;
 		page->next = NULL;
 		page->width = page->height = -1;
@@ -332,6 +334,9 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 		} else {
 			previousPage->next = page;
 		}
+
+		// Record another page added
+		atlas->numberOfPages++;
 
 		// Attempt to read the page name
 		charactersRead = getline(&lineBuffer, &bufferSize, atlasFile);

@@ -52,9 +52,15 @@ enum TextureAtlas_filter {
 struct TextureAtlas_atlas {
 	/* Pointer to memory containing the first page.*/
 	struct TextureAtlas_page* firstPage;
+
+	/* How many pages are in the atlas */
+	int numberOfPages;
 };
 
 struct TextureAtlas_page {
+	/* 0 based index of the page. */
+	int index;
+
 	/* Filename of the image backing this page. */
 	char* name;
 
