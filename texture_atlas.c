@@ -265,7 +265,7 @@ void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename) 
 				fprintf(destination, "  split: %i, %i, %i, %i\n", region->splits[0], region->splits[1], region->splits[2], region->splits[3]);
 			if (region->pads != NULL)
 				fprintf(destination, "  pad: %i, %i, %i, %i\n", region->pads[0], region->pads[1], region->pads[2], region->pads[3]);
-			fprintf(destination, "  orig: %i, %i\n", region->orignalWidth, region->orignalHeight);
+			fprintf(destination, "  orig: %i, %i\n", region->originalWidth, region->originalHeight);
 			fprintf(destination, "  offset: %i, %i\n", region->offsetX, region->offsetY);
 			fprintf(destination, "  index: %i\n", region->index);
 
@@ -451,8 +451,8 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 			region->index = -1;
 			region->offsetX = -1;
 			region->offsetY = -1;
-			region->orignalHeight = -1;
-			region->orignalWidth = -1;
+			region->originalHeight = -1;
+			region->originalWidth = -1;
 			region->pads = NULL;
 			region->rotate = false;
 			region->splits = NULL;
@@ -509,8 +509,8 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 				} else if (strcmp(attribute, "orig") == 0) {
 					unsigned int width, height;
 					if (sscanf(value, "%u, %u", &width, &height) == 2) {
-						region->orignalWidth = width;
-						region->orignalHeight = height;
+						region->originalWidth = width;
+						region->originalHeight = height;
 					} else {
 						return display_error(atlas, "ERROR. TextureAtlas: Could not read 'orig' token: '%s'\n", value);
 					}

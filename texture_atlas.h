@@ -106,7 +106,7 @@ struct TextureAtlas_region {
 
 	/* Original size of the region, before it was packed. Might be larger than
 	 * width/height if whitespace was stripped. */
-	unsigned int orignalWidth, orignalHeight;
+	unsigned int originalWidth, originalHeight;
 
 	/* The amount of whitespace pixels that were stripped from the left and
 	 * bottom edges of the image before it was packed. */
