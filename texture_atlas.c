@@ -576,3 +576,19 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 
 	return atlas;
 }
+
+struct TextureAtlas_region* TextureAtlas_findRegion(struct TextureAtlas_atlas* atlas, char* regionName) {
+	struct TextureAtlas_page* currentPage = atlas->firstPage;
+	while (currentPage != NULL) {
+		struct TextureAtlas_region* currentRegion = currentPage->firstRegion;
+		while (currentRegion != NULL) {
+			if (strcmp(currentRegion->name, regionName) == 0) {
+				return currentRegion;
+			}
+			currentRegion = currentRegion->nextRegion;
+		}
+		currentPage = currentPage->next;
+	}
+	return NULL;
+}
+

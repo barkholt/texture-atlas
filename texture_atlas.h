@@ -132,6 +132,8 @@ struct TextureAtlas_region {
 
 struct TextureAtlas_atlas* TextureAtlas_read(const char* filename);
 
+struct TextureAtlas_region* TextureAtlas_findRegion(struct TextureAtlas_atlas* atlas, char* regionName);
+
 void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename);
 
 void TextureAtlas_cleanup(struct TextureAtlas_atlas* atlas);
