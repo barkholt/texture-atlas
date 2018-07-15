@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <libgen.h>
 
 #define BUFFER_SIZE 1024
 static const char* FORMAT_RGBA8888 = "RGBA8888";
@@ -234,6 +235,12 @@ void freePage(struct TextureAtlas_page* page) {
 
 	struct TextureAtlas_page* next = page->next;
 
+	if (page->name != NULL)
+		free(page->name);
+
+	if (page->absolutePath != NULL)
+		free(page->absolutePath);
+
 	free(page);
 
 	freePage(next);
@@ -322,6 +329,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 		page->index = nextPageIndex++;
 		page->name = NULL;
 		page->next = NULL;
+		page->absolutePath = NULL;
 		page->width = page->height = -1;
 		page->format = TextureAtlas_UNDEFINED_FORMAT;
 		page->repeat = TextureAtlas_UNDEFINED_REPEAT;
@@ -344,6 +352,12 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 		if (pageName == NULL)
 			return display_error(atlas, "ERROR. TextureAtlas: Could not find page name in file '%s'.", filename);
 		page->name = pageName;
+
+		// Compute the absolute path to the page image
+		char* absPathToAtlas = realpath(filename, NULL);
+		char* absPathToDir = dirname(absPathToAtlas);
+		asprintf(&page->absolutePath, "%s/%s", absPathToDir, page->name);
+		free(absPathToAtlas);
 
 		while ((charactersRead = getline(&lineBuffer, &bufferSize, atlasFile)) > 0) {
 			char attribute[BUFFER_SIZE];

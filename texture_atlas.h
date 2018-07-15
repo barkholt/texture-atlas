@@ -64,6 +64,9 @@ struct TextureAtlas_page {
 	/* Filename of the image backing this page. */
 	char* name;
 
+	/** Absolute path of image. Computed based on the assumption that the file is placed in the same directory as the .atlas file. */
+	char* absolutePath;
+
 	/* The width and height of the page image. */
 	int width, height;
 
