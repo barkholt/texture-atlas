@@ -544,7 +544,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 						return display_error(atlas, "ERROR. TextureAtlas: Could not read 'index' token: '%s'\n", value);
 					}
 				} else if (strcmp(attribute, "split") == 0) {
-					int v1, v2, v3, v4;
+					unsigned int v1, v2, v3, v4;
 					if (sscanf(value, "%u, %u, %u, %u", &v1, &v2, &v3, &v4) == 4) {
 						int* splits = malloc(sizeof(int) * 4);
 						splits[0] = v1;
@@ -556,7 +556,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 						return display_error(atlas, "ERROR. TextureAtlas: Could not read 'split' token: '%s'\n", value);
 					}
 				} else if (strcmp(attribute, "pad") == 0) {
-					int v1, v2, v3, v4;
+					unsigned int v1, v2, v3, v4;
 					if (sscanf(value, "%u, %u, %u, %u", &v1, &v2, &v3, &v4) == 4) {
 						int* pads = malloc(sizeof(int) * 4);
 						pads[0] = v1;

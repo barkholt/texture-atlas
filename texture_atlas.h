@@ -102,18 +102,18 @@ struct TextureAtlas_region {
 	bool rotate;
 
 	/* The location of the region within the page. */
-	unsigned int x, y;
+	int x, y;
 
 	/* The size of the region in the page. */
-	unsigned int width, height;
+	int width, height;
 
 	/* Original size of the region, before it was packed. Might be larger than
 	 * width/height if whitespace was stripped. */
-	unsigned int originalWidth, originalHeight;
+	int originalWidth, originalHeight;
 
 	/* The amount of whitespace pixels that were stripped from the left and
 	 * bottom edges of the image before it was packed. */
-	unsigned int offsetX, offsetY;
+	int offsetX, offsetY;
 
 	/* The number at the end of the original image file name, or -1 if none.
 	 * When sprites are packed, if the original file name ends with a number,
