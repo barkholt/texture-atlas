@@ -124,7 +124,7 @@ bool parse_filter_value(char* value, enum TextureAtlas_filter* result) {
 	return true;
 }
 
-void* display_error(struct TextureAtlas_atlas* atlas, char* message, ...) {
+void* display_error(TextureAtlas_atlas* atlas, char* message, ...) {
 	va_list argptr;
 	va_start(argptr, message);
 	vfprintf(stderr, message, argptr);
@@ -207,7 +207,7 @@ bool parse_attribute(ssize_t charactersRead, char* lineBuffer, char* attribute, 
 	return true;
 }
 
-void freeRegion(struct TextureAtlas_region* region) {
+void freeRegion(TextureAtlas_region* region) {
 	if (region == NULL)
 		return;
 
@@ -217,7 +217,7 @@ void freeRegion(struct TextureAtlas_region* region) {
 	if (region->splits != NULL)
 		free(region->splits);
 
-	struct TextureAtlas_region* next = region->nextRegion;
+	TextureAtlas_region* next = region->nextRegion;
 
 	free(region);
 
@@ -225,7 +225,7 @@ void freeRegion(struct TextureAtlas_region* region) {
 	freeRegion(next);
 }
 
-void freePage(struct TextureAtlas_page* page) {
+void freePage(TextureAtlas_page* page) {
 	if (page == NULL)
 		return;
 
@@ -233,7 +233,7 @@ void freePage(struct TextureAtlas_page* page) {
 		freeRegion(page->firstRegion);
 	}
 
-	struct TextureAtlas_page* next = page->next;
+	TextureAtlas_page* next = page->next;
 
 	if (page->name != NULL)
 		free(page->name);
@@ -246,13 +246,13 @@ void freePage(struct TextureAtlas_page* page) {
 	freePage(next);
 }
 
-void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename) {
+void TextureAtlas_write(TextureAtlas_atlas* atlas, const char* filename) {
 	FILE* destination = fopen(filename, "w");
 
 	if (destination == NULL)
 		return;
 
-	struct TextureAtlas_page* nextPage = atlas->firstPage;
+	TextureAtlas_page* nextPage = atlas->firstPage;
 	while (nextPage != NULL) {
 		fprintf(destination, "\n");
 		fprintf(destination, "%s\n", nextPage->name);
@@ -261,7 +261,7 @@ void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename) 
 		fprintf(destination, "filter: %s,%s\n", filterEnumToString(nextPage->minificationFilter), filterEnumToString(nextPage->magnificationFilter));
 		fprintf(destination, "repeat: %s\n", repeatEnumToString(nextPage->repeat));
 
-		struct TextureAtlas_region* region = nextPage->firstRegion;
+		TextureAtlas_region* region = nextPage->firstRegion;
 
 		while (region != NULL) {
 			fprintf(destination, "%s\n", region->name);
@@ -284,7 +284,7 @@ void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename) 
 	fclose(destination);
 }
 
-void TextureAtlas_cleanup(struct TextureAtlas_atlas* atlas) {
+void TextureAtlas_cleanup(TextureAtlas_atlas* atlas) {
 
 	if (atlas != NULL) {
 
@@ -294,7 +294,7 @@ void TextureAtlas_cleanup(struct TextureAtlas_atlas* atlas) {
 	}
 }
 
-struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
+TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 
 	FILE* atlasFile = fopen(filename, "r");
 
@@ -303,7 +303,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 		return NULL;
 
 	// Create and initialize the atlas object we will be injecting data into
-	struct TextureAtlas_atlas* atlas = malloc(sizeof(struct TextureAtlas_atlas));
+	TextureAtlas_atlas* atlas = malloc(sizeof(TextureAtlas_atlas));
 	atlas->firstPage = NULL;
 	atlas->numberOfPages = 0;
 
@@ -319,13 +319,13 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 	}
 
 	// Keep track of the previous page, to allow creation of linked list of pages.
-	struct TextureAtlas_page* previousPage = NULL;
+	TextureAtlas_page* previousPage = NULL;
 
 	bool keepScanningPages = true;
 	int nextPageIndex = 0;
 	while (keepScanningPages) {
 		// Create page, and initialized to a known invalid state
-		struct TextureAtlas_page* page = malloc(sizeof(struct TextureAtlas_page));
+		TextureAtlas_page* page = malloc(sizeof(TextureAtlas_page));
 		page->index = nextPageIndex++;
 		page->name = NULL;
 		page->next = NULL;
@@ -451,13 +451,13 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 
 		previousPage = page;
 
-		struct TextureAtlas_region* previousRegion = NULL;
+		TextureAtlas_region* previousRegion = NULL;
 
 		// Start scanning regions
 		bool keepScanningRegions = true;
 		while (keepScanningRegions) {
 			// Create region to fill, and initialize to known default/invalid state.
-			struct TextureAtlas_region* region = malloc(sizeof(struct TextureAtlas_region));
+			TextureAtlas_region* region = malloc(sizeof(TextureAtlas_region));
 			region->page = page;
 			region->name = NULL;
 			region->width = -1;
@@ -490,6 +490,7 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 			region->name = regionName;
 
 			while ((charactersRead = getline(&lineBuffer, &bufferSize, atlasFile)) > 0) {
+
 				char attribute[BUFFER_SIZE];
 				char value[BUFFER_SIZE];
 				bool success = parse_attribute(charactersRead, lineBuffer, attribute, value, 2);
@@ -591,10 +592,10 @@ struct TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 	return atlas;
 }
 
-struct TextureAtlas_region* TextureAtlas_findRegion(struct TextureAtlas_atlas* atlas, char* regionName) {
-	struct TextureAtlas_page* currentPage = atlas->firstPage;
+TextureAtlas_region* TextureAtlas_findRegion(TextureAtlas_atlas* atlas, char* regionName) {
+	TextureAtlas_page* currentPage = atlas->firstPage;
 	while (currentPage != NULL) {
-		struct TextureAtlas_region* currentRegion = currentPage->firstRegion;
+		TextureAtlas_region* currentRegion = currentPage->firstRegion;
 		while (currentRegion != NULL) {
 			if (strcmp(currentRegion->name, regionName) == 0) {
 				return currentRegion;

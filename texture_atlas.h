@@ -25,7 +25,7 @@
 
 #include <stdbool.h>
 
-enum TextureAtlas_format {
+typedef enum TextureAtlas_format {
 	TextureAtlas_ALPHA,
 	TextureAtlas_INTENSITY,
 	TextureAtlas_LUMINANCE_ALPHA,
@@ -34,11 +34,13 @@ enum TextureAtlas_format {
 	TextureAtlas_RGB888,
 	TextureAtlas_RGBA8888,
 	TextureAtlas_UNDEFINED_FORMAT
-};
-enum TextureAtlas_repeat {
+} TextureAtlas_format;
+
+typedef enum TextureAtlas_repeat {
 	TextureAtlas_X, TextureAtlas_Y, TextureAtlas_XY, TextureAtlas_NONE, TextureAtlas_UNDEFINED_REPEAT
-};
-enum TextureAtlas_filter {
+} TextureAtlas_repeat;
+
+typedef enum TextureAtlas_filter {
 	TextureAtlas_NEAREST,
 	TextureAtlas_LINEAR,
 	TextureAtlas_MIP_MAP,
@@ -47,17 +49,17 @@ enum TextureAtlas_filter {
 	TextureAtlas_MIP_MAP_NEAREST_LINEAR,
 	TextureAtlas_MIP_MAP_LINEAR_LINEAR,
 	TextureAtlas_UNDEFINED_FILTER
-};
+} TextureAtlas_filter;
 
-struct TextureAtlas_atlas {
+typedef struct TextureAtlas_atlas {
 	/* Pointer to memory containing the first page.*/
 	struct TextureAtlas_page* firstPage;
 
 	/* How many pages are in the atlas */
 	int numberOfPages;
-};
+} TextureAtlas_atlas;
 
-struct TextureAtlas_page {
+typedef struct TextureAtlas_page {
 	/* 0 based index of the page. */
 	int index;
 
@@ -88,9 +90,9 @@ struct TextureAtlas_page {
 
 	/* The head of the linked list containing all regions of the page. */
 	struct TextureAtlas_region* firstRegion;
-};
+} TextureAtlas_page;
 
-struct TextureAtlas_region {
+typedef struct TextureAtlas_region {
 	/* The page this region belongs to.*/
 	struct TextureAtlas_page* page;
 
@@ -131,14 +133,14 @@ struct TextureAtlas_region {
 
 	/* The regions are organized in a linked list, this links to the next one. */
 	struct TextureAtlas_region* nextRegion;
-};
+} TextureAtlas_region;
 
-struct TextureAtlas_atlas* TextureAtlas_read(const char* filename);
+TextureAtlas_atlas* TextureAtlas_read(const char* filename);
 
-struct TextureAtlas_region* TextureAtlas_findRegion(struct TextureAtlas_atlas* atlas, char* regionName);
+TextureAtlas_region* TextureAtlas_findRegion(TextureAtlas_atlas* atlas, char* regionName);
 
-void TextureAtlas_write(struct TextureAtlas_atlas* atlas, const char* filename);
+void TextureAtlas_write(TextureAtlas_atlas* atlas, const char* filename);
 
-void TextureAtlas_cleanup(struct TextureAtlas_atlas* atlas);
+void TextureAtlas_cleanup(TextureAtlas_atlas* atlas);
 
 #endif /* TEXTURE_ATLAS_H_ */
