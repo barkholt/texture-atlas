@@ -308,9 +308,9 @@ TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 	atlas->numberOfPages = 0;
 
 	// Setup variables for reading lines
-	char* lineBuffer = malloc(sizeof(char) * BUFFER_SIZE);
-	size_t bufferSize;
-	ssize_t charactersRead;
+	char* lineBuffer = calloc(BUFFER_SIZE, sizeof(char));
+	size_t bufferSize = 0;
+	ssize_t charactersRead = 0;
 
 	charactersRead = getline(&lineBuffer, &bufferSize, atlasFile);
 
