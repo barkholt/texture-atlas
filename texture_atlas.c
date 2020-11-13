@@ -217,6 +217,9 @@ void freeRegion(TextureAtlas_region* region) {
 	if (region->splits != NULL)
 		free(region->splits);
 
+	if (region->name != NULL)
+		free(region->name);
+
 	TextureAtlas_region* next = region->nextRegion;
 
 	free(region);
