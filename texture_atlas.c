@@ -406,6 +406,9 @@ TextureAtlas_atlas* TextureAtlas_read(const char* filename) {
 					char* firstValue = value;
 					char* lastValue = separator + 1;
 
+					if (isspace(*lastValue))
+						lastValue++;
+
 					int lastLength = strlen(lastValue);
 					if (lastValue[lastLength - 1] == '\n') {
 						lastValue[lastLength - 1] = 0;
